@@ -1,0 +1,21 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: oauth2-server
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        jdbc:
+          lob:
+          non_contextual_creation: true
+    generate-ddl: true
+  datasource:
+    url: jdbc:mysql://database.mysql-5.6.com:3306/oauth2-server-v2?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
