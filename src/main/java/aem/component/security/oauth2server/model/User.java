@@ -1,8 +1,6 @@
 package aem.component.security.oauth2server.model;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -17,6 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String username;
 
     private String password;

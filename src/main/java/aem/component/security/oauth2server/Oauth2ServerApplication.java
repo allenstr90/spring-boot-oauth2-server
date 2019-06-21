@@ -22,9 +22,9 @@ public class Oauth2ServerApplication {
         SpringApplication.run(Oauth2ServerApplication.class, args);
     }
 
-    @Bean
-    CommandLineRunner commandLineRunner(UserRepository userRepository, PermissionRepository permissionRepository,
-                                        PasswordEncoder passwordEncoder, Oauth2ClientRepository oauth2ClientRepository) {
+    /*@Bean
+    public CommandLineRunner commandLineRunner(UserRepository userRepository, PermissionRepository permissionRepository,
+                                               PasswordEncoder passwordEncoder, Oauth2ClientRepository oauth2ClientRepository) {
         return args -> {
             Permission permission = new Permission();
             permission.setName("admin".toUpperCase());
@@ -36,7 +36,7 @@ public class Oauth2ServerApplication {
             user.setPermissions(Stream.of(permission).collect(Collectors.toSet()));
             userRepository.save(user);
 
-            Oauth2Client oauth2Client=new Oauth2Client();
+            Oauth2Client oauth2Client = new Oauth2Client();
             oauth2Client.setClient_id("oauth2");
             oauth2Client.setClient_secret(passwordEncoder.encode("oauth2secret"));
             oauth2Client.setScope("read,write");
@@ -48,6 +48,6 @@ public class Oauth2ServerApplication {
             oauth2Client.setResource_ids("oauth2Id");
             oauth2ClientRepository.save(oauth2Client);
         };
-    }
+    }*/
 
 }

@@ -1,6 +1,6 @@
 package aem.component.security.oauth2server.config;
 
-import aem.component.security.oauth2server.services.UserDetailsService;
+import aem.component.security.oauth2server.services.OauthUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -15,12 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class Oauth2ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    UserDetailsService userDetailsService;
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
+    OauthUserDetailsService oauthUserDetailsService;
 
     @Bean
     @Qualifier("passwordEncoder")
@@ -28,6 +23,12 @@ public class Oauth2ServerSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(oauthUserDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();

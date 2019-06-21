@@ -1,10 +1,8 @@
 package aem.component.security.oauth2server.config;
 
-import aem.component.security.oauth2server.constants.SecurityConstants;
-import aem.component.security.oauth2server.services.UserDetailsService;
+import aem.component.security.oauth2server.services.OauthUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -23,7 +21,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import javax.sql.DataSource;
-import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableAuthorizationServer
@@ -33,7 +31,7 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Qualifier("authenticationManagerBean")
     AuthenticationManager authenticationManager;
     @Autowired
-    UserDetailsService userDetailsService;
+    OauthUserDetailsService oauthUserDetailsService;
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
@@ -50,29 +48,19 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
         configurer
                 .withClientDetails(jdbcClientDetailsService());
-                /*.inMemory()
-                .withClient(SecurityConstants.CLIENT_ID)
-                .secret(passwordEncoder.encode(SecurityConstants.SECRET))
-                .authorizedGrantTypes("password", "refresh_token", "client_credentials")
-                .authorities("USER", "ADMIN")
-                .scopes("read", "write")
-                .resourceIds(SecurityConstants.SIGQUO_RESOURCE_ID, SecurityConstants.SIGQUO_BASE_RESOURCE_ID, SecurityConstants.OAUTH2_RESOURCE_ID)
-                .accessTokenValiditySeconds(SecurityConstants.ACCESS_TOKEN_VALIDITY)
-                .refreshTokenValiditySeconds(SecurityConstants.REFRESH_TOKEN_VALIDITY);*/
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer configurer) {
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(accessTokenConverter()));
+        tokenEnhancerChain.setTokenEnhancers(Collections.singletonList(accessTokenConverter()));
 
 
         configurer
                 .tokenStore(tokenStore())
                 .tokenEnhancer(tokenEnhancerChain)
                 .authenticationManager(authenticationManager)
-                //.accessTokenConverter(accessTokenConverter())
-                .userDetailsService(userDetailsService);
+                .userDetailsService(oauthUserDetailsService);
     }
 
     @Bean
@@ -97,7 +85,7 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     }
 
     @Bean
-    public JdbcClientDetailsService jdbcClientDetailsService(){
+    public JdbcClientDetailsService jdbcClientDetailsService() {
         return new JdbcClientDetailsService(dataSource);
     }
 
