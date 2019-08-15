@@ -13,15 +13,17 @@ import java.util.stream.Collectors;
 
 @Service("userDetailsService")
 public class OauthUserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
 
+    private final UserRepository userRepository;
+
+    @Autowired
+    public OauthUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         Optional<User> byUsername = userRepository.findByUsername(username);
-        if (!byUsername.isPresent())
-            throw new UsernameNotFoundException(username);
         return byUsername
                 .map(user ->
                         new org.springframework.security.core.userdetails.User(
@@ -29,6 +31,6 @@ public class OauthUserDetailsService implements org.springframework.security.cor
                                 user.getPermissions().stream()
                                         .map(permission -> new SimpleGrantedAuthority(permission.getName()))
                                         .collect(Collectors.toSet())))
-                .get();
+                .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 }

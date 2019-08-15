@@ -7,13 +7,13 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
         jdbc:
           lob:
-          non_contextual_creation: true
+            non_contextual_creation: true
     generate-ddl: true
   datasource:
     url: jdbc:mysql://localhost:3306/oauth2-server-v2?useUnicode=true&characterEncoding=utf8&useSSL=false
