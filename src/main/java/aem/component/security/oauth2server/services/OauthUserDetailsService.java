@@ -16,7 +16,6 @@ public class OauthUserDetailsService implements org.springframework.security.cor
 
     private final UserRepository userRepository;
 
-    @Autowired
     public OauthUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

@@ -4,7 +4,6 @@ import aem.component.security.oauth2server.config.SystemConfig;
 import aem.component.security.oauth2server.dto.PaginatedData;
 import aem.component.security.oauth2server.dto.UserDTO;
 import aem.component.security.oauth2server.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
@@ -22,8 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 )
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public ResponseEntity<PaginatedData<UserDTO>> getUsers(@SortDefault.SortDefaults({
