@@ -6,4 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService {
     Page<UserDTO> getAll(Pageable pageable);
+
+    UserDTO save(UserDTO userDTO);
 }

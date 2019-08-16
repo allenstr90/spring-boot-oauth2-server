@@ -22,12 +22,12 @@ public class Oauth2ServerApplication {
         SpringApplication.run(Oauth2ServerApplication.class, args);
     }
 
-    /*@Bean
+    @Bean
     public CommandLineRunner commandLineRunner(UserRepository userRepository, PermissionRepository permissionRepository,
                                                PasswordEncoder passwordEncoder, Oauth2ClientRepository oauth2ClientRepository) {
         return args -> {
             Permission permission = new Permission();
-            permission.setName("admin".toUpperCase());
+            permission.setName("ROLE_ADMIN".toUpperCase());
             permissionRepository.save(permission);
 
             User user = new User();
@@ -43,11 +43,11 @@ public class Oauth2ServerApplication {
             oauth2Client.setAccess_token_validity(3600);
             oauth2Client.setAutoapprove("true");
             oauth2Client.setAuthorized_grant_types("password,authorization_code,refresh_token,client_credentials");
-            oauth2Client.setAuthorities("USER,ADMIN");
+            oauth2Client.setAuthorities("ROLE_USER,ROLE_ADMIN");
             oauth2Client.setRefresh_token_validity(2592000);
             oauth2Client.setResource_ids("oauth2Id");
             oauth2ClientRepository.save(oauth2Client);
         };
-    }*/
+    }
 
 }

@@ -9,9 +9,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping(
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
         consumes = MediaType.APPLICATION_JSON_UTF8_VALUE
 )
+@PreAuthorize("hasRole(\"" + SystemConfig.ADMIN + "\")")
 public class UserController {
 
     private final UserService userService;
@@ -32,5 +36,11 @@ public class UserController {
             @SortDefault(sort = "id", direction = Sort.Direction.ASC),
             @SortDefault(sort = "username", direction = Sort.Direction.ASC)}) Pageable pageable) {
         return ResponseEntity.ok(new PaginatedData<>(userService.getAll(pageable)));
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDTO> addUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
+        UserDTO user = userService.save(userDTO);
+        return ResponseEntity.created(new URI(SystemConfig.BASE_PATH + "/users/" + userDTO.getUsername())).body(user);
     }
 }
