@@ -3,6 +3,7 @@ package aem.component.security.oauth2server.controller;
 import aem.component.security.oauth2server.config.SystemConfig;
 import aem.component.security.oauth2server.dto.PaginatedData;
 import aem.component.security.oauth2server.dto.UserDTO;
+import aem.component.security.oauth2server.exception.FieldExistException;
 import aem.component.security.oauth2server.services.UserService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> addUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
+    public ResponseEntity<UserDTO> addUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException, FieldExistException {
         UserDTO user = userService.save(userDTO);
         return ResponseEntity.created(new URI(SystemConfig.BASE_PATH + "/users/" + userDTO.getUsername())).body(user);
     }
