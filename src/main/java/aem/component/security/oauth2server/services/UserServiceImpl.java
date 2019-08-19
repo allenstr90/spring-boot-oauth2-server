@@ -54,4 +54,9 @@ public class UserServiceImpl implements UserService {
         }
         return new UserDTO(userRepository.save(user));
     }
+
+    @Override
+    public Optional<UserDTO> getUser(String username) {
+        return userRepository.findByUsername(username).map(UserDTO::new);
+    }
 }

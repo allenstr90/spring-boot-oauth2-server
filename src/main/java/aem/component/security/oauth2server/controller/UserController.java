@@ -5,6 +5,7 @@ import aem.component.security.oauth2server.dto.PaginatedData;
 import aem.component.security.oauth2server.dto.UserDTO;
 import aem.component.security.oauth2server.exception.FieldExistException;
 import aem.component.security.oauth2server.services.UserService;
+import aem.component.security.oauth2server.utils.Constants;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
@@ -43,5 +44,10 @@ public class UserController {
     public ResponseEntity<UserDTO> addUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException, FieldExistException {
         UserDTO user = userService.save(userDTO);
         return ResponseEntity.created(new URI(SystemConfig.BASE_PATH + "/users/" + userDTO.getUsername())).body(user);
+    }
+
+    @GetMapping(path = "{username:" + Constants.USERNAME_PATTERN + "}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable String username) {
+        return ResponseEntity.of(userService.getUser(username));
     }
 }
