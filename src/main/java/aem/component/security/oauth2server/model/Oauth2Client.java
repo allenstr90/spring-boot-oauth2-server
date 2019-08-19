@@ -2,6 +2,7 @@ package aem.component.security.oauth2server.model;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -11,10 +12,14 @@ import javax.persistence.Table;
 @Data
 public class Oauth2Client {
     @Id
-    private String client_id;
+    @Column(name = "client_id")
+    private String clientId;
 
-    private String client_secret;
-    private String resource_ids;
+    @Column(name = "client_secret")
+    private String clientSecret;
+    @Column(name = "resource_ids")
+    private String resourceIds;
+
     private String scope;
     private String authorized_grant_types;
     private String web_server_redirect_uri;
